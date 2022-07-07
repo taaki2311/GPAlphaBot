@@ -5,7 +5,6 @@
 #include <TJpg_Decoder.h>
 
 #define BUFFER_SIZE 1024
-#define MAX_SIZE 65536
 #define DMA_BUFFER_SIZE 512
 #define ONE_SECOND_DELAY 1000
 
@@ -19,12 +18,16 @@ TFT_eSPI tft = TFT_eSPI();
 using namespace std;
 
 vector<uint8_t> image;
-unsigned int bufferCount;
 uint16_t dma1[DMA_BUFFER_SIZE], dma2[DMA_BUFFER_SIZE];
 uint16_t *dmaPtr;
 bool dmaSel;
 
 void setup() {
+  Serial.begin(115200);
+  while(!Serial) {
+    delay(250);
+  }
+  
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
