@@ -10,12 +10,13 @@ camera = PiCamera(resolution = (WIDTH, HEIGHT))
 
 try:
 	with socket(AF_INET, SOCK_DGRAM) as sock:
-			while True:
-				camera.capture('stream.jpg', 'jpeg')
-				with open('stream.jpg', 'rb') as stream:
+		sock.connect(HOST)
+		while True:
+			camera.capture('stream.jpg', 'jpeg')
+			with open('stream.jpg', 'rb') as stream:
+				data = stream.read(BUFFER_SIZE)
+				while(data):
+					sock.send(data)
 					data = stream.read(BUFFER_SIZE)
-					while(data):
-						sock.sendto(data, HOST)
-						data = stream.read(BUFFER_SIZE)
 except KeyboardInterrupt:
 	pass
