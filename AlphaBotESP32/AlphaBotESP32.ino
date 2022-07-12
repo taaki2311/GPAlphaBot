@@ -23,11 +23,6 @@ uint16_t *dmaPtr;
 bool dmaSel;
 
 void setup() {
-  Serial.begin(115200);
-  while(!Serial) {
-    delay(250);
-  }
-  
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
 
@@ -44,21 +39,21 @@ void setup() {
     udp.onPacket([](AsyncUDPPacket udpPacket) {
 
       if ((udpPacket.length() == BUFFER_SIZE) &&
-        (udpPacket.data()[0] == 0xFF) &&
-        (udpPacket.data()[1] == 0xD8) &&
-        (udpPacket.data()[2] == 0xFF)) {
-           image.clear();
+          (udpPacket.data()[0] == 0xFF) &&
+          (udpPacket.data()[1] == 0xD8) &&
+          (udpPacket.data()[2] == 0xFF)) {
+        image.clear();
       }
 
       vector<uint8_t> packet_vector(&udpPacket.data()[0], &udpPacket.data()[udpPacket.length()]);
       image.insert(image.end(), packet_vector.begin(), packet_vector.end());
 
       if ((udpPacket.length() < BUFFER_SIZE) &&
-        (udpPacket.data()[udpPacket.length()-2] == 0xFF) &&
-        (udpPacket.data()[udpPacket.length()-1] == 0xD9)) {
-          tft.startWrite();
-          TJpgDec.drawJpg(0, 0, image.data(), image.size());
-          tft.endWrite();
+          (udpPacket.data()[udpPacket.length() - 2] == 0xFF) &&
+          (udpPacket.data()[udpPacket.length() - 1] == 0xD9)) {
+        tft.startWrite();
+        TJpgDec.drawJpg(0, 0, image.data(), image.size());
+        tft.endWrite();
       }
     });
   }
@@ -72,10 +67,13 @@ bool jpg_decode(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) 
   }
   tft.pushImageDMA(x, y, w, h, bitmap, dmaPtr);
 
-  if (dmaSel) {
-    dmaPtr = dma2;
-  } else {
-    dmaPtr = dma1;
+  switch (dmaSel) {
+    case false:
+      dmaPtr = dma1;
+      break;
+    case true:
+      dmaPtr = dma2;
+      break;
   } dmaSel = !dmaSel;
   return 1;
 }
