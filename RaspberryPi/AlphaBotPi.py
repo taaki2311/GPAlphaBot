@@ -4,11 +4,12 @@ from io import BytesIO
 
 WIDTH = 128
 HEIGHT = 160
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 1472
 HOST = ('192.168.11.229', 55555)
 
 camera = PiCamera(resolution = (WIDTH, HEIGHT))
 stream = BytesIO()
+
 try:
 	with socket(AF_INET, SOCK_DGRAM) as sock:
 		sock.connect(HOST)
