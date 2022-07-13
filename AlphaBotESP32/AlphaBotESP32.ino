@@ -4,7 +4,7 @@
 #include <TFT_eSPI.h>
 #include <TJpg_Decoder.h>
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 1472
 #define DMA_BUFFER_SIZE 512
 #define ONE_SECOND_DELAY 1000
 
