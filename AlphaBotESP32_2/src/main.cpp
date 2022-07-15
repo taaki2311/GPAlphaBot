@@ -1,8 +1,8 @@
-#include "esp_wifi.h"
-//#include "esp_asyncudp.h"
+#include <esp_wifi.h>
+#include <ESPAsyncUDP.h>
 #include <vector>
-#include "TFT_eSPI.h"
-#include "TJpg_Decoder.h"
+#include <TFT_eSPI.h>
+#include <TJpg_Decoder.h>
 
 #define BUFFER_SIZE 1472
 #define DMA_BUFFER_SIZE 512
@@ -21,6 +21,10 @@ vector<uint8_t> image;
 uint16_t dma1[DMA_BUFFER_SIZE], dma2[DMA_BUFFER_SIZE];
 uint16_t *dmaPtr;
 bool dmaSel;
+
+extern "C" {
+  void app_main();
+}
 
 void app_main() {
   WiFi.mode(WIFI_STA);
